@@ -124,10 +124,11 @@ jobs:
           GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
 
       - name: Create and push release branch and tag
+        run: git push origin ${GITHUB_REF##*/}
+
+      - name: Create and push release branch and tag
         if: github.event.inputs.releaseType != 'p'
         run: |
-          git push origin main ${GITHUB_REF##*/}
-
           git push --tags
 
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}

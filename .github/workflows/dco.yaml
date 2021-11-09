@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: DCO Validator
-on: [ "pull_request" ]
-
-jobs:
-  dco-gpg-validator:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: ZupIT/zup-dco-validator@v1.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_GPG: false
+#name: DCO Validator
+#on: [ "pull_request" ]
+#
+#jobs:
+#  dco-gpg-validator:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: ZupIT/zup-dco-validator@v1.1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          VALIDATE_GPG: false

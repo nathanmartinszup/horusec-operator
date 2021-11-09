@@ -20,9 +20,9 @@ builds:
       - GO111MODULE=on
     main: ./cmd/app
     ldflags:
-      - -X github.com/ZupIT/horusec-operator/api/v2alpha1.LatestVersion=v{{ .Version }}
-      - -X github.com/ZupIT/horusec-operator/api/v2alpha1.Commit={{ .Commit }}
-      - -X github.com/ZupIT/horusec-operator/api/v2alpha1.Date={{ .Date }}
+      - -X github.com/nathanmartinszup/horusec-operator/api/v2alpha1.LatestVersion=v{{ .Version }}
+      - -X github.com/nathanmartinszup/horusec-operator/api/v2alpha1.Commit={{ .Commit }}
+      - -X github.com/nathanmartinszup/horusec-operator/api/v2alpha1.Date={{ .Date }}
     goos:
       - linux
     goarch:
@@ -38,36 +38,8 @@ release:
   draft: true
   extra_files:
     - glob: ./deployments/cosign.pub
-  ids:
-    -
 signs:
   - cmd: cosign
     stdin: '{{ .Env.COSIGN_PWD }}'
     args: ["sign-blob", "-key={{ .Env.COSIGN_KEY_LOCATION }}", "-output=${signature}", "${artifact}"]
     artifacts: all
-docker_signs:
-  - cmd: cosign
-    args: ["sign", "-key={{ .Env.COSIGN_KEY_LOCATION }}", "${artifact}"]
-    artifacts: all
-    stdin: '{{ .Env.COSIGN_PWD }}'
-dockers:
-  - id: horusec-operator
-    goos: linux
-    goarch: amd64
-    ids:
-      - horusec-operator
-    image_templates:
-      - "horuszup/horusec-operator:latest"
-      - "horuszup/horusec-operator:{{ .Tag }}"
-      - "horuszup/horusec-operator:v{{ .Major }}"
-    skip_push: false
-    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
-    use: docker
-    build_flag_templates:
-      - "--pull"
-      - "--label=org.opencontainers.image.created={{.Date}}"
-      - "--label=org.opencontainers.image.title={{.ProjectName}}"
-      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
-      - "--label=org.opencontainers.image.version={{.Version}}"
-    push_flags:
-      - --tls-verify=false

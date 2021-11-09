@@ -57,13 +57,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v4
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          git_user_signingkey: true
-          git_commit_gpgsign: true
+#      - name: Import GPG key
+#        uses: crazy-max/ghaction-import-gpg@v4
+#        with:
+#          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+#          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+#          git_user_signingkey: true
+#          git_commit_gpgsign: true
 
       - name: Cosign Installer
         uses: sigstore/cosign-installer@main
@@ -103,6 +103,7 @@ jobs:
         with:
           push: false
           signoff: true
+          branch: main
           author_name: horusec
           author_email: horusec@zup.com.br
           committer_name: horusec

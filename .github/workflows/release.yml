@@ -123,13 +123,12 @@ jobs:
           COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
           GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
 
-      - name: Create and push release branch and tag
-        run: git push origin ${GITHUB_REF##*/}
-
-      - name: Create and push release branch and tag
+      - name: Create release branch
         if: github.event.inputs.releaseType != 'p'
         run: |
-          git push --tags
-
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
+
+      - name: Push tag
+        run: |
+          git push origin ${{ steps.updated-version.outputs.version }}

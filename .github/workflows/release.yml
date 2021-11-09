@@ -126,7 +126,7 @@ jobs:
       - name: Create and push release branch and tag
         if: github.event.inputs.releaseType != 'p'
         run: |
-          git push origin ${GITHUB_REF##*/}
+          git push origin main ${GITHUB_REF##*/}
 
           git push --tags
 

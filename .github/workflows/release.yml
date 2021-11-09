@@ -103,7 +103,6 @@ jobs:
         with:
           push: false
           signoff: true
-          branch: main
           author_name: horusec
           author_email: horusec@zup.com.br
           committer_name: horusec

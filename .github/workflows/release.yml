@@ -129,13 +129,14 @@ jobs:
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
-      - name: Pull Request
-        run: |
-          git_setup
-          git_cmd git checkout -b "${PR_BRANCH}" origin/"${INPUT_PR_BRANCH}"
-          git_cmd git cherry-pick "${GITHUB_SHA}"
-
-
-
+      - name: Create PR to main
+        if: github.ref != 'refs/heads/main'
+        uses: gorillio/github-action-cherry-pick@master
+        with:
+          pr_branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+          GITBOT_EMAIL: horusec@zup.com.br
+          DRY_RUN: false
 
 

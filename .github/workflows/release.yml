@@ -129,7 +129,7 @@ jobs:
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
-      - name: Create PR to main
+      - name: Cherry pick
         if: github.ref != 'refs/heads/main'
         run: |
           test=$(git log -1 --format="%H")
@@ -139,6 +139,21 @@ jobs:
           git checkout -b "update-$test" origin/main
           git cherry-pick $test --strategy-option theirs
           git push -u origin update-$test
+
+      - name: Create Pull Request
+        if: github.ref != 'refs/heads/main'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Updating files
+          committer: GitHub <horusec@zup.com.br>
+          author: horusec
+          signoff: true
+          branch: main
+          delete-branch: true
+          title: '[Example] Update files'
+          body: |
+            Test
 
 #      - name: Create PR to main
 #        if: github.ref != 'refs/heads/main'

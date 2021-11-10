@@ -83,6 +83,26 @@ jobs:
           chmod +x /tmp/semver.sh
           /tmp/semver.sh -${{ github.event.inputs.releaseType }} ${{ github.event.repository.full_name }}
 
+      - name: Create tag
+        run: git tag ${{ steps.updated-version.outputs.version }} && sleep 10
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
+          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
+
+      - name: Create release branch
+        if: github.event.inputs.releaseType != 'p'
+        run: |
+          git branch ${{ steps.updated-version.outputs.releaseBranchName }}
+          git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
+
       - name: Update versioning files
         run: |
           npm install -g json
@@ -108,26 +128,6 @@ jobs:
           committer_name: horusec
           committer_email: horusec@zup.com.br
           message: "[skip ci] Update versioning files"
-
-      - name: Create tag
-        run: git tag ${{ steps.updated-version.outputs.version }} && sleep 10
-
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --rm-dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
-          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
-
-      - name: Create release branch
-        if: github.event.inputs.releaseType != 'p'
-        run: |
-          git branch ${{ steps.updated-version.outputs.releaseBranchName }}
-          git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
 #      - name: Push tag and changes
 #        run: |

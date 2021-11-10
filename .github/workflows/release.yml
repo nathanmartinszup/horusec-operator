@@ -137,8 +137,8 @@ jobs:
           git config --global user.email 'horusec@zup.com.br'
           git fetch --all
           git checkout -b "update-$test" origin/main
-          git cherry-pick $test
-          git push -u origin update-${GITHUB_SHA}
+          git cherry-pick $test --strategy-option theirs
+          git push -u origin update-$test
 
 #      - name: Create PR to main
 #        if: github.ref != 'refs/heads/main'

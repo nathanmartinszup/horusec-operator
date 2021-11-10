@@ -130,7 +130,7 @@ jobs:
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
       - name: Create PR to main
-        if: github.event.inputs.releaseType != 'p'
+        if: github.ref != 'refs/heads/main'
         run: |
           sleep 10
           git config --global user.name 'horusec'

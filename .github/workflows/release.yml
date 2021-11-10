@@ -129,6 +129,20 @@ jobs:
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
-      - name: Push tag
+      - name: Push tag and changes
         run: |
           git push origin ${{ steps.updated-version.outputs.version }}
+          git push origin ${GITHUB_REF##*/}
+
+      - name: Create PR to main
+        if: github.ref != 'refs/heads/main'
+        uses: gorillio/github-action-cherry-pick@master
+        with:
+          pr_branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITBOT_EMAIL: horusec@zup.com.br
+          DRY_RUN: false
+
+
+

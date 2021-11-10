@@ -130,13 +130,19 @@ jobs:
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
       - name: Create PR to main
-        if: github.ref != 'refs/heads/main'
-        uses: gorillio/github-action-cherry-pick@master
-        with:
-          pr_branch: main
-        env:
-          GITHUB_TOKEN: ${{ secrets.HORUSEC_PUSH_TOKEN }}
-          GITBOT_EMAIL: horusec@zup.com.br
-          DRY_RUN: false
+        if: github.event.inputs.releaseType != 'p'
+        run: |
+          git config --global user.name 'horusec'
+          git config --global user.email 'horusec@zup.com.br'
 
+#      - name: Create PR to main
+#        if: github.ref != 'refs/heads/main'
+#        uses: gorillio/github-action-cherry-pick@master
+#        with:
+#          pr_branch: main
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+#          GITBOT_EMAIL: horusec@zup.com.br
+#          DRY_RUN: false
+#
 

@@ -97,12 +97,6 @@ jobs:
           COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
           GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
 
-      - name: Create release branch
-        if: github.event.inputs.releaseType != 'p'
-        run: |
-          git branch ${{ steps.updated-version.outputs.releaseBranchName }}
-          git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
-
       - name: Update versioning files
         run: |
           npm install -g json
@@ -129,19 +123,19 @@ jobs:
           committer_email: horusec@zup.com.br
           message: "[skip ci] Update versioning files"
 
-#      - name: Push tag and changes
-#        run: |
-#          git push origin ${{ steps.updated-version.outputs.version }}
+      - name: Create release branch
+        if: github.event.inputs.releaseType != 'p'
+        run: |
+          git branch ${{ steps.updated-version.outputs.releaseBranchName }}
+          git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
-      - name: Create PR to main
-        if: github.ref != 'refs/heads/main'
-        uses: gorillio/github-action-cherry-pick@master
-        with:
-          pr_branch: main
-        env:
-          GITHUB_TOKEN: ${{ secrets.HORUSEC_PUSH_TOKEN }}
-          GITBOT_EMAIL: horusec@zup.com.br
-          DRY_RUN: false
+      - name: Pull Request
+        run: |
+          git_setup
+          git_cmd git checkout -b "${PR_BRANCH}" origin/"${INPUT_PR_BRANCH}"
+          git_cmd git cherry-pick "${GITHUB_SHA}"
+
+
 
 
 

@@ -86,16 +86,16 @@ jobs:
       - name: Create tag
         run: git tag ${{ steps.updated-version.outputs.version }} && sleep 10
 
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --rm-dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
-          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
+#      - name: Run GoReleaser
+#        uses: goreleaser/goreleaser-action@v2
+#        with:
+#          distribution: goreleaser
+#          version: latest
+#          args: release --rm-dist
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
+#          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
 
       - name: Update versioning files
         run: |
@@ -134,10 +134,9 @@ jobs:
           git push origin ${{ steps.updated-version.outputs.version }}
 
       - name: Create PR to main
-        if: github.ref != 'refs/heads/main'
         uses: gorillio/github-action-cherry-pick@master
         with:
-          pr_branch: main
+          pr_branch: release/v2.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITBOT_EMAIL: horusec@zup.com.br

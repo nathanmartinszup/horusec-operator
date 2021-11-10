@@ -129,9 +129,9 @@ jobs:
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
-      - name: Push tag and changes
-        run: |
-          git push origin ${{ steps.updated-version.outputs.version }}
+#      - name: Push tag and changes
+#        run: |
+#          git push origin ${{ steps.updated-version.outputs.version }}
 
       - name: Create PR to main
         if: github.ref != 'refs/heads/main'

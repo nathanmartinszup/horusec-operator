@@ -139,7 +139,7 @@ jobs:
         with:
           pr_branch: main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.HORUSEC_PUSH_TOKEN }}
           GITBOT_EMAIL: horusec@zup.com.br
           DRY_RUN: false
 

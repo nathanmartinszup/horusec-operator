@@ -132,12 +132,12 @@ jobs:
       - name: Create PR to main
         if: github.ref != 'refs/heads/main'
         run: |
-          sleep 10
+          test=$(git log -1 --format="%H")
           git config --global user.name 'horusec'
           git config --global user.email 'horusec@zup.com.br'
           git fetch --all
-          git checkout -b "update-${GITHUB_SHA}" origin/main
-          git cherry-pick "${GITHUB_SHA}"
+          git checkout -b "update-$test" origin/main
+          git cherry-pick $test
           git push -u origin update-${GITHUB_SHA}
 
 #      - name: Create PR to main

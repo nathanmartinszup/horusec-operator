@@ -150,7 +150,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: ${{ steps.cherry-pick.outputs.branch }}
+          branch: "update-${{ steps.cherry-pick.outputs.branch }}"
           delete-branch: false
           title: '[Example] Update report'
           body: |

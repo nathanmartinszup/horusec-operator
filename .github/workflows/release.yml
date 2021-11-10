@@ -134,9 +134,10 @@ jobs:
           git push origin ${{ steps.updated-version.outputs.version }}
 
       - name: Create PR to main
+        if: github.ref != 'refs/heads/main'
         uses: gorillio/github-action-cherry-pick@master
         with:
-          pr_branch: release/v2.2
+          pr_branch: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITBOT_EMAIL: horusec@zup.com.br

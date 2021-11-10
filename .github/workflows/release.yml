@@ -130,9 +130,11 @@ jobs:
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
       - name: Cherry pick
+        id: cherry-pick
         if: github.ref != 'refs/heads/main'
         run: |
           test=$(git log -1 --format="%H")
+          echo "::set-output name=branch::${test}"
           git config --global user.name 'horusec'
           git config --global user.email 'horusec@zup.com.br'
           git fetch --all
@@ -147,10 +149,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Updating files
           committer: GitHub <horusec@zup.com.br>
-          author: horusec
+          author: horusec@zup.com.br
           signoff: true
-          branch: main
-          delete-branch: true
+          branch: ${{ steps.cherry-pick.outputs.branch }}
+          delete-branch: false
           title: '[Example] Update files'
           body: |
             Test

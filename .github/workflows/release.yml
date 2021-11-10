@@ -132,8 +132,13 @@ jobs:
       - name: Create PR to main
         if: github.event.inputs.releaseType != 'p'
         run: |
+          sleep 10
           git config --global user.name 'horusec'
           git config --global user.email 'horusec@zup.com.br'
+          git fetch --all
+          git checkout -b "update-${GITHUB_SHA}" origin/main
+          git cherry-pick "${GITHUB_SHA}"
+          git push -u origin update-${GITHUB_SHA}
 
 #      - name: Create PR to main
 #        if: github.ref != 'refs/heads/main'

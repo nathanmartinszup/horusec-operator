@@ -16,6 +16,7 @@ name: DCO Validator
 on:
   pull_request:
     types: [opened, synchronize]
+  push:
 jobs:
   dco-gpg-validator:
     if: "!contains(github.event.head_commit.message, 'skip ci')"

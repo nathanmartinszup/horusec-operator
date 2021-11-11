@@ -142,28 +142,15 @@ jobs:
           echo "::set-output name=branch::${CHERRY_PICK_SHA}"
           git fetch --all
           git checkout -b "update-release-files-$CHERRY_PICK_SHA" origin/main
-          git cherry-pick $CHERRY_PICK_SHA --strategy-option theirs
+          git cherry-pick $CHERRY_PICK_SHA -x --strategy-option theirs
           git push -u origin update-release-files-$CHERRY_PICK_SHA
 
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.event.repository.full_name }}/pulls \
-          --header 'authorization: Bearer ${{ secrets.HORUSEC_PUSH_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --header 'Accept: application/vnd.github.v3+json' \
-          --data '{
-              "head	": "update-release-files-${{ steps.cherry-pick.outputs.branch }}",
-              "base": "main",
-              "title": "skip ci:release - automatic pull request updating versioning files",
-              "body": "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.branch }} was cherry picked from the release branch, which already contains all the necessary changes."
-            }' \
-          --fail
-
-#      - name: Create Pull Request
-#        if: github.ref != 'refs/heads/main'
-#        uses: repo-sync/pull-request@v2
-#        with:
-#          source_branch: "update-release-files-${{ steps.cherry-pick.outputs.branch }}"
-#          destination_branch: "main"
-#          pr_title: "skip ci:release - automatic pull request updating versioning files"
-#          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.branch }} was cherry picked from the release branch, which already contains all the necessary changes."
-#          github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+      - name: Create Pull Request
+        if: github.ref != 'refs/heads/main'
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: "update-release-files-${{ steps.cherry-pick.outputs.branch }}"
+          destination_branch: "main"
+          pr_title: "skip ci:release - automatic pull request updating versioning files"
+          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.branch }} was cherry picked from the release branch, which already contains all the necessary changes."
+          github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}

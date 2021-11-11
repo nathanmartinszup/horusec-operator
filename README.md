@@ -68,7 +68,7 @@ spec: {}
 ```
 
 And now you apply your changes: 
-
+test
 ```bash
 kubectl apply -f "https://raw.githubusercontent.com/ZupIT/horusec-operator/main/config/samples/install_v2alpha1_horusecplatform.yaml"
 ```

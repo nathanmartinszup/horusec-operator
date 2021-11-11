@@ -17,7 +17,7 @@ on: [ "push" ]
 permissions: read-all
 jobs:
   license:
-    if: "!contains(github.event.head_commit.message, 'skip ci:')"
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

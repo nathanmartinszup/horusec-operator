@@ -57,13 +57,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#      - name: Import GPG key
-#        uses: crazy-max/ghaction-import-gpg@v4
-#        with:
-#          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-#          passphrase: ${{ secrets.GPG_PASSPHRASE }}
-#          git_user_signingkey: true
-#          git_commit_gpgsign: true
+      #      - name: Import GPG key
+      #        uses: crazy-max/ghaction-import-gpg@v4
+      #        with:
+      #          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+      #          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      #          git_user_signingkey: true
+      #          git_commit_gpgsign: true
 
       - name: Cosign Installer
         uses: sigstore/cosign-installer@main
@@ -83,19 +83,19 @@ jobs:
           chmod +x /tmp/semver.sh
           /tmp/semver.sh -${{ github.event.inputs.releaseType }} ${{ github.event.repository.full_name }}
 
-#      - name: Create tag
-#        run: git tag ${{ steps.updated-version.outputs.version }} && sleep 10
-#
-#      - name: Run GoReleaser
-#        uses: goreleaser/goreleaser-action@v2
-#        with:
-#          distribution: goreleaser
-#          version: latest
-#          args: release --rm-dist
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
-#          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
+      #      - name: Create tag
+      #        run: git tag ${{ steps.updated-version.outputs.version }} && sleep 10
+      #
+      #      - name: Run GoReleaser
+      #        uses: goreleaser/goreleaser-action@v2
+      #        with:
+      #          distribution: goreleaser
+      #          version: latest
+      #          args: release --rm-dist
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
+      #          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
 
       - name: Update versioning files
         run: |
@@ -129,19 +129,23 @@ jobs:
           git branch ${{ steps.updated-version.outputs.releaseBranchName }}
           git push origin ${{ steps.updated-version.outputs.releaseBranchName }}
 
+      # This step gets the sha of last commit made, witch is the updating versioning files commit, after that creates a
+      # branch from the origin main and cherry pick this commit on it. This process need to occur only when the release
+      # workflow is started from a branch that isn't the main branch, for example a release branch.
+      # When the workflow it's triggered to run on main, the commit it's going to be made directly to the main branch.
       - name: Cherry pick
         if: github.ref != 'refs/heads/main'
         id: cherry-pick
         run: |
-          git config --local user.email "horusec@zup.com.br"
-          git config --local user.name "horusec"
           CHERRY_PICK_SHA=$(git log -1 --format="%H")
           echo "::set-output name=branch::${CHERRY_PICK_SHA}"
-          git fetch --all
           git checkout -b "update-release-files-$CHERRY_PICK_SHA" origin/main
           git cherry-pick $CHERRY_PICK_SHA -x --strategy-option theirs
           git push -u origin update-release-files-$CHERRY_PICK_SHA
 
+      # This step utilizes an action to create a pull request with the branch that was cherry picked on the last step
+      # into the main branch. As the last commit, this also needs to run only when the release workflow is started from a
+      # branch that isn't the main branch. Others workflows should be skipped cause of the skip ci in the pull request title.
       - name: Create Pull Request
         if: github.ref != 'refs/heads/main'
         uses: repo-sync/pull-request@v2

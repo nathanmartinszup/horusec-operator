@@ -35,6 +35,7 @@ snapshot:
 archives:
   - format: binary
 release:
+  draft: true
   extra_files:
     - glob: ./deployments/cosign.pub
 signs:

@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -150,4 +150,4 @@ jobs:
           destination_branch: "main"
           pr_title: "skip ci:release - automatic pull request updating versioning files"
           pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.branch }} was cherry picked from the release branch, which already contains all the necessary changes."
-          github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -133,13 +133,13 @@ jobs:
         if: github.ref != 'refs/heads/main'
         id: cherry-pick
         run: |
+          git config --local user.email "horusec@zup.com.br"
+          git config --local user.name "horusec"
           CHERRY_PICK_SHA=$(git log -1 --format="%H")
           echo "::set-output name=branch::${CHERRY_PICK_SHA}"
-          git config --global user.email "horusec@zup.com.br"
-          git config --global user.name "horusec"
           git fetch --all
           git checkout -b "update-release-files-$CHERRY_PICK_SHA" origin/main
-          git cherry-pick $CHERRY_PICK_SHA --strategy-option theirs
+          git cherry-pick $CHERRY_PICK_SHA -x --strategy-option theirs
           git push -u origin update-release-files-$CHERRY_PICK_SHA
 
       - name: Create Pull Request

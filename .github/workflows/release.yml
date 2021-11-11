@@ -36,13 +36,15 @@ jobs:
 
     steps:
       - name: Checkout
-      - uses: actions/checkout@v2
-        run: |
-          git config --global user.email "horusec@zup.com.br"
-          git config --global user.name "horusec"
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
           token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+
+      - name: Set git config
+        run: |
+          git config --global user.email "horusec@zup.com.br"
+          git config --global user.name "horusec"
 
       - name: Set up Go
         uses: actions/setup-go@v2

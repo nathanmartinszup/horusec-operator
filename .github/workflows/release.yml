@@ -43,8 +43,8 @@ jobs:
 
       - name: Set git config
         run: |
-          git config --global user.email "horusec@zup.com.br"
-          git config --global user.name "horusec"
+          git config --local user.email "horusec@zup.com.br"
+          git config --local user.name "horusec"
 
       - name: Set up Go
         uses: actions/setup-go@v2

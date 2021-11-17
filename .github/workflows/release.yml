@@ -87,7 +87,7 @@ jobs:
 
       - name: Test2
         run: |
-          echo ${{ github.event.repository.org }}
+          echo ${{ github.repository_owner }}
           echo ${{ github.event.repository.name }}
 
       # Run a script contained in the devkit repository that gets the latest release version and create an output
@@ -97,7 +97,7 @@ jobs:
         run: |
          mage ${{ github.event.inputs.releaseType }}
         env:
-          HORUSEC_REPOSITORY_ORG: ${{ github.event.repository.org }}
+          HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
       - name: Test2

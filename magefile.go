@@ -7,7 +7,7 @@ import (
 )
 
 func Version(releaseType string) error {
-	_, err := mage.NewVersion(releaseType)
+	_, err := mage.UpVersions(releaseType)
 
 	return err
 }

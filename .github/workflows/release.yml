@@ -85,11 +85,6 @@ jobs:
       - name: Install Mage
         run: go install github.com/magefile/mage@07afc7d24f4d6d6442305d49552f04fbda5ccb3e
 
-      - name: Test2
-        run: |
-          echo ${{ github.repository_owner }}
-          echo ${{ github.event.repository.name }}
-
       # Run a script contained in the devkit repository that gets the latest release version and create an output
       # containing the next versions.
       - name: Version increment

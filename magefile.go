@@ -1,3 +1,4 @@
+//go:build mage
 // +build mage
 
 package main
@@ -7,7 +8,7 @@ import (
 )
 
 func Version(releaseType string) error {
-	_, err := mage.UpVersions(releaseType)
+	err := mage.UpVersions(releaseType)
 
 	return err
 }

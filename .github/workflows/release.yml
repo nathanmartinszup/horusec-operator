@@ -90,7 +90,7 @@ jobs:
       - name: Version increment
         id: updated-version
         run: |
-         mage ${{ github.event.inputs.releaseType }}
+         mage Version ${{ github.event.inputs.releaseType }}
         env:
           HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}

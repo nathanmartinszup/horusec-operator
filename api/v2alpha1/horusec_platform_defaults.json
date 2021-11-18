@@ -7,7 +7,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-analytic",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -37,7 +37,7 @@
             "pullSecrets": [],
             "registry": "docker.io/horuszup",
             "repository": "horusec-migrations",
-            "tag": "321"
+            "tag": "v9.9.9"
           }
         },
         "name": "horusec_analytic_db",
@@ -89,7 +89,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-api",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -143,7 +143,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-auth",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -233,7 +233,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-core",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -287,7 +287,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-manager",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -342,7 +342,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-messages",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -414,7 +414,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-vulnerability",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -468,7 +468,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-webhook",
-          "tag": "321"
+          "tag": "v9.9.9"
         },
         "livenessProbe": {
           "timeoutSeconds": 1,
@@ -542,7 +542,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-migrations",
-          "tag": "321"
+          "tag": "v9.9.9"
         }
       },
       "name": "horusec_db",

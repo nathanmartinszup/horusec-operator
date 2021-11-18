@@ -5,22 +5,24 @@ package main
 
 import (
 	"fmt"
-	"github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
-	"github.com/magefile/mage/sh"
 	"os"
+
+	"github.com/magefile/mage/sh"
+	// mage:import
+	_ "github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
 )
 
 const (
-	replacePathAnalytic            = "'this.components.analytic.container.image.tag=\"%s\"'"
-	replacePathApi                 = "'this.components.api.container.image.tag=\"%s\"'"
-	replacePathAuth                = "'this.components.auth.container.image.tag=\"%s\"'"
-	replacePathCore                = "'this.components.core.container.image.tag=\"%s\"'"
-	replacePathManager             = "'this.components.manager.container.image.tag=\"%s\"'"
-	replacePathMessages            = "'this.components.messages.container.image.tag=\"%s\"'"
-	replacePathVulnerability       = "'this.components.vulnerability.container.image.tag=\"%s\"'"
-	replacePathWebhook             = "'this.components.webhook.container.image.tag=\"%s\"'"
-	replacePathDatabaseMigration   = "'this.global.database.migration.image.tag=\"%s\"'"
-	replacePathAnalyticDatabase    = "'this.components.analytic.database.migration.image.tag=\"%s\"'"
+	replacePathAnalytic            = "this.components.analytic.container.image.tag=\"%s\""
+	replacePathApi                 = "this.components.api.container.image.tag=\"%s\""
+	replacePathAuth                = "this.components.auth.container.image.tag=\"%s\""
+	replacePathCore                = "this.components.core.container.image.tag=\"%s\""
+	replacePathManager             = "this.components.manager.container.image.tag=\"%s\""
+	replacePathMessages            = "this.components.messages.container.image.tag=\"%s\""
+	replacePathVulnerability       = "this.components.vulnerability.container.image.tag=\"%s\""
+	replacePathWebhook             = "this.components.webhook.container.image.tag=\"%s\""
+	replacePathDatabaseMigration   = "this.global.database.migration.image.tag=\"%s\""
+	replacePathAnalyticDatabase    = "this.components.analytic.database.migration.image.tag=\"%s\""
 	pathToReplaceSeedKustomization = "config/manager/kustomization.yaml"
 	pathToReplaceSeedReadme        = "README.md"
 	defaultJsonPath                = "api/v2alpha1/horusec_platform_defaults.json"
@@ -31,14 +33,6 @@ const (
 	envActualVersion   = "HORUSEC_ACTUAL_VERSION"
 	envReleaseVersion  = "HORUSEC_RELEASE_VERSION"
 )
-
-func UpVersions(releaseType string) error {
-	return mageutils.UpVersions(releaseType)
-}
-
-func CherryPick() error {
-	return mageutils.CherryPick()
-}
 
 func UpdateVersioningFiles() error {
 	if err := sh.RunV("npm", "install", "-g", "json"); err != nil {

@@ -79,7 +79,7 @@ func replaceValues() []string {
 func updateOperatorVersion() error {
 	seedValue := fmt.Sprintf("'s/%s/%s/g'", getActualVersion(), getReleaseVersion())
 
-	return sh.Run("sed", "-i", seedValue, pathToReplaceSeedReadme)
+	return sh.Run("sed", "- i", seedValue, pathToReplaceSeedReadme)
 }
 
 func getActualVersion() string {

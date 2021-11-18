@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
-	github.com/ZupIT/horusec-devkit v1.0.20-0.20211117140317-9a90422feb61 // indirect
+	github.com/ZupIT/horusec-devkit v1.0.20-0.20211118140109-1864010dd24a // indirect
 	github.com/go-logr/logr v0.4.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.6

@@ -1,14 +1,13 @@
-//go:build mage
-// +build mage
-
 package main
 
 import (
-	mage "github.com/ZupIT/horusec-devkit"
+	"github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
 )
 
-func Version(releaseType string) error {
-	err := mage.UpVersions(releaseType)
+func UpVersions(releaseType string) error {
+	return mageutils.UpVersions(releaseType)
+}
 
-	return err
+func CherryPick() error {
+	return mageutils.CherryPick()
 }

@@ -1,4 +1,5 @@
 package main
+<<<<<<< HEAD
 
 import (
 	"fmt"
@@ -14,3 +15,5 @@ func TestName(t *testing.T) {
 	err := UpdateVersioningFiles()
 	fmt.Printf(err.Error())
 }
+=======
+>>>>>>> 64a43c0 (test)

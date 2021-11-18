@@ -165,6 +165,7 @@ jobs:
         id: cherry-pick
         run: |
           mage CherryPick
+          sleep 5
 
       #      - name: Cherry pick
       #        if: github.ref != 'refs/heads/main'

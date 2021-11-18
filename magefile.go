@@ -1,6 +1,3 @@
-//go:build mage
-// +build mage
-
 package main
 
 import (
@@ -27,9 +24,9 @@ const (
 )
 
 const (
-	EnvPlatformVersion = "HORUSEC_PLATFORM_VERSION"
-	EnvActualVersion   = "HORUSEC_ACTUAL_VERSION"
-	EnvReleaseVersion  = "HORUSEC_RELEASE_VERSION"
+	envPlatformVersion = "HORUSEC_PLATFORM_VERSION"
+	envActualVersion   = "HORUSEC_ACTUAL_VERSION"
+	envReleaseVersion  = "HORUSEC_RELEASE_VERSION"
 )
 
 func UpVersions(releaseType string) error {
@@ -45,11 +42,11 @@ func UpdateVersioningFiles() error {
 		return err
 	}
 
-	//for _, valueToReplace := range replaceValues() {
-	//	if err := replacePlatformVersion(valueToReplace); err != nil {
-	//		return err
-	//	}
-	//}
+	for _, valueToReplace := range replaceValues() {
+		if err := replacePlatformVersion(valueToReplace); err != nil {
+			return err
+		}
+	}
 
 	return updateOperatorVersion()
 }
@@ -57,7 +54,6 @@ func UpdateVersioningFiles() error {
 func replacePlatformVersion(valueToReplace string) error {
 	valueReplaced := fmt.Sprintf(valueToReplace, getPlatformVersion())
 
-	fmt.Printf("json -I -f %s -e %s", defaultJsonPath, valueReplaced)
 	return sh.RunV("json", "-I", "-f", defaultJsonPath, "-e", valueReplaced)
 }
 
@@ -76,20 +72,32 @@ func replaceValues() []string {
 	}
 }
 
-func updateOperatorVersion() error {
-	seedValue := fmt.Sprintf("'s/%s/%s/g'", getActualVersion(), getReleaseVersion())
+func sedValues() []string {
+	return []string{
+		pathToReplaceSeedKustomization,
+		pathToReplaceSeedReadme,
+	}
+}
 
-	return sh.Run("sed", "- i", seedValue, pathToReplaceSeedReadme)
+func updateOperatorVersion() error {
+	for _, path := range sedValues() {
+		sed := fmt.Sprintf("s/%s/%s/g", getActualVersion(), getReleaseVersion())
+		if err := sh.Run("sed", "-i", sed, path); err != nil {
+
+		}
+	}
+
+	return nil
 }
 
 func getActualVersion() string {
-	return os.Getenv(EnvActualVersion)
+	return os.Getenv(envActualVersion)
 }
 
 func getReleaseVersion() string {
-	return os.Getenv(EnvReleaseVersion)
+	return os.Getenv(envReleaseVersion)
 }
 
 func getPlatformVersion() string {
-	return os.Getenv(EnvPlatformVersion)
+	return os.Getenv(envPlatformVersion)
 }

@@ -14,3 +14,7 @@ func UpVersions(releaseType string) error {
 func CherryPick() error {
 	return mageutils.CherryPick()
 }
+
+func UpdateVersioningFiles() {
+
+}

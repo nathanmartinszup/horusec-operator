@@ -187,5 +187,5 @@ jobs:
           source_branch: "${{ steps.cherry-pick.outputs.branchName }}"
           destination_branch: "main"
           pr_title: "versioning:release - [skip ci] automatic pull request updating versioning files"
-          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit  was cherry picked from the release branch, which already contains all the necessary changes."
+          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.commitSha }} was cherry picked from the release branch, which already contains all the necessary changes."
           github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}

@@ -114,7 +114,11 @@ jobs:
       # The README.md and kustomization.yaml also are updated to match the new operator version that ir being released.
       - name: Update versioning files
         run: |
-          mage UpdateVersioningFiles ${{ github.event.inputs.releaseType }} ${{ steps.updated-version.outputs.actualVersion }} ${{ steps.updated-version.outputs.releaseVersion }}
+          mage UpdateVersioningFiles
+        env:
+          HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
+          HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualVersion }}
+          HORUSEC_RELEASE_VERSION: ${{ steps.updated-version.outputs.releaseVersion }}
 
       # The changes made in the last step are committed to the branch that the workflow was triggered, this commit is not
       # going to trigger any workflow cause the skip ci in the commit message.
@@ -145,11 +149,7 @@ jobs:
         if: github.ref != 'refs/heads/main'
         id: cherry-pick
         run: |
-          CHERRY_PICK_SHA=$(git log -1 --format="%H")
-          echo "::set-output name=branch::${CHERRY_PICK_SHA}"
-          git checkout -b "update-release-files-$CHERRY_PICK_SHA" origin/main
-          git cherry-pick $CHERRY_PICK_SHA -x --strategy-option theirs
-          git push -u origin update-release-files-$CHERRY_PICK_SHA
+          mage CherryPick
 
       #      - name: Cherry pick
       #        if: github.ref != 'refs/heads/main'

@@ -11,18 +11,19 @@ import (
 )
 
 const (
-	replacePathAnalytic          = "'this.components.analytic.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathApi               = "'this.components.api.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathAuth              = "'this.components.auth.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathCore              = "'this.components.core.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathManager           = "'this.components.manager.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathMessages          = "'this.components.messages.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathVulnerability     = "'this.components.vulnerability.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathWebhook           = "'this.components.webhook.container.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathDatabaseMigration = "'this.global.database.migration.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	replacePathAnalyticDatabase  = "'this.components.analytic.database.migration.image.tag=\"${{ github.event.inputs.horusecPlatformVersion }}\"'"
-	defaultJsonPath              = "api/v2alpha1/horusec_platform_defaults.json"
-	seedOperatorVersion          = "\"s/%s/%s/g\""
+	replacePathAnalytic            = "'this.components.analytic.container.image.tag=\"%s\"'"
+	replacePathApi                 = "'this.components.api.container.image.tag=\"%s\"'"
+	replacePathAuth                = "'this.components.auth.container.image.tag=\"%s\"'"
+	replacePathCore                = "'this.components.core.container.image.tag=\"%s\"'"
+	replacePathManager             = "'this.components.manager.container.image.tag=\"%s\"'"
+	replacePathMessages            = "'this.components.messages.container.image.tag=\"%s\"'"
+	replacePathVulnerability       = "'this.components.vulnerability.container.image.tag=\"%s\"'"
+	replacePathWebhook             = "'this.components.webhook.container.image.tag=\"%s\"'"
+	replacePathDatabaseMigration   = "'this.global.database.migration.image.tag=\"%s\"'"
+	replacePathAnalyticDatabase    = "'this.components.analytic.database.migration.image.tag=\"%s\"'"
+	pathToReplaceSeedKustomization = "config/manager/kustomization.yaml"
+	pathToReplaceSeedReadme        = "README.md"
+	defaultJsonPath                = "api/v2alpha1/horusec_platform_defaults.json"
 )
 
 const (
@@ -44,11 +45,11 @@ func UpdateVersioningFiles() error {
 		return err
 	}
 
-	for _, valueToReplace := range replaceValues() {
-		if err := replacePlatformVersion(valueToReplace); err != nil {
-			return err
-		}
-	}
+	//for _, valueToReplace := range replaceValues() {
+	//	if err := replacePlatformVersion(valueToReplace); err != nil {
+	//		return err
+	//	}
+	//}
 
 	return updateOperatorVersion()
 }
@@ -56,6 +57,7 @@ func UpdateVersioningFiles() error {
 func replacePlatformVersion(valueToReplace string) error {
 	valueReplaced := fmt.Sprintf(valueToReplace, getPlatformVersion())
 
+	fmt.Printf("json -I -f %s -e %s", defaultJsonPath, valueReplaced)
 	return sh.RunV("json", "-I", "-f", defaultJsonPath, "-e", valueReplaced)
 }
 
@@ -75,10 +77,9 @@ func replaceValues() []string {
 }
 
 func updateOperatorVersion() error {
-	seedValue := fmt.Sprintf(seedOperatorVersion, getActualVersion(), getReleaseVersion())
+	seedValue := fmt.Sprintf("'s/%s/%s/g'", getActualVersion(), getReleaseVersion())
 
-	return sh.RunV("find", ".", "-type", "f", "-not", "-path", "\"./.git/*\"", "-not", "-path",
-		"\"./go.mod\"", "-not", "-path", "\"./go.sum\"", "|", "xargs", "sed", "-i", seedValue)
+	return sh.Run("sed", "-i", seedValue, pathToReplaceSeedReadme)
 }
 
 func getActualVersion() string {

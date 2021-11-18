@@ -112,13 +112,28 @@ jobs:
 
       # This step updates the defaults.json to the platform version passed in the workflow input for all microservices.
       # The README.md and kustomization.yaml also are updated to match the new operator version that ir being released.
+      #      - name: Update versioning files
+      #        run: |
+      #          mage UpdateVersioningFiles
+      #        env:
+      #          HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
+      #          HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualVersion }}
+      #          HORUSEC_RELEASE_VERSION: ${{ steps.updated-version.outputs.releaseVersion }}
+
       - name: Update versioning files
         run: |
-          mage UpdateVersioningFiles
-        env:
-          HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
-          HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualVersion }}
-          HORUSEC_RELEASE_VERSION: ${{ steps.updated-version.outputs.releaseVersion }}
+          npm install -g json
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.analytic.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.analytic.database.migration.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.api.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.auth.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.core.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.manager.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.messages.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.vulnerability.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.webhook.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.global.database.migration.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          find . -type f -not -path "./.git/*" -not -path "./go.mod" -not -path "./go.sum" | xargs sed -i "s/${{ steps.updated-version.outputs.actualVersion }}/${{ steps.updated-version.outputs.version }}/g"
 
       # The changes made in the last step are committed to the branch that the workflow was triggered, this commit is not
       # going to trigger any workflow cause the skip ci in the commit message.

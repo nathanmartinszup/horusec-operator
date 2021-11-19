@@ -63,8 +63,7 @@ jobs:
 
       # Set the default GitHub config with the user:horusec and email:horusec@zup.com.br.
       - name: Git config
-        run: |
-          mage DefaultGitConfig
+        run: mage DefaultGitConfig
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v4

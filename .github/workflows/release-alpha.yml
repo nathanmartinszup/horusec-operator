@@ -76,13 +76,13 @@ jobs:
           committer_email: horusec@zup.com.br
           message: "versioning:release - [skip ci] automatic commit updating versioning files"
 
-#      - name: Build and push
-#        uses: docker/build-push-action@v2
-#        with:
-#          push: true
-#          context: .
-#          file: ./deployments/dockerfiles/Dockerfile
-#          tags: horuszup/horusec-operator:alpha
+      #      - name: Build and push
+      #        uses: docker/build-push-action@v2
+      #        with:
+      #          push: true
+      #          context: .
+      #          file: ./deployments/dockerfiles/Dockerfile
+      #          tags: horuszup/horusec-operator:alpha
 
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -113,7 +113,7 @@ jobs:
           name: alpha
           draft: false
           prerelease: true
-          commitish: $(git log -1 --format=%H)
+          commitish: $COMMIT_SHA
           gzip: false
           allow_override: true
           files: |
@@ -121,3 +121,5 @@ jobs:
           body: |
             ## Docker images
             - `docker pull horuszup/horusec-operator:alpha`
+        env:
+          COMMIT_SHA: $(git log -1 --format=%H)

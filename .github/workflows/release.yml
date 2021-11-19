@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       releaseType:
-        description: 'Release type: M (Major); m (Minor); p (Path)'
+        description: 'Release types: (M - major); (m - minor); (p - patch)'
         required: true
       horusecPlatformVersion:
         description: "Version of horusec-platform for this release. Ex: v0.0.0"
@@ -59,19 +59,20 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Install Mage
-        run: go install github.com/magefile/mage@v1.11.0
+        run: go install github.com/magefile/mage@v1.11
 
+      # Set the default GitHub config with the user:horusec and email:horusec@zup.com.br.
       - name: Git config
         run: |
           mage DefaultGitConfig
 
-      # - name: Import GPG key
-      #   uses: crazy-max/ghaction-import-gpg@v4
-      #   with:
-      #     gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-      #     passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      #     git_user_signingkey: true
-      #     git_commit_gpgsign: true
+     - name: Import GPG key
+       uses: crazy-max/ghaction-import-gpg@v4
+       with:
+         gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+         passphrase: ${{ secrets.GPG_PASSPHRASE }}
+         git_user_signingkey: true
+         git_commit_gpgsign: true
 
       - name: Cosign Installer
         uses: sigstore/cosign-installer@main
@@ -95,15 +96,7 @@ jobs:
 
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
-        run: |
-          git tag $TEST
-          echo $TEST
-          sleep 5
-        env:
-          TEST: ${{ secrets.HORUSEC_ACTUAL_RELEASE_VERSION }}
-
-      # - name: Create tag
-      #   run: mage CreateLocalTag ${{ steps.updated-version.outputs.releaseVersion }}
+        run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextReleaseVersion }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
@@ -113,7 +106,7 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.releaseVersion }}
+          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.nextReleaseVersion }}
 
       # This step updates the defaults.json to the platform version passed in the workflow input for all microservices.
       # The README.md and kustomization.yaml also are updated to match the new operator version that ir being released.
@@ -122,8 +115,8 @@ jobs:
           mage UpdateVersioningFiles
         env:
           HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
-          HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualVersion }}
-          HORUSEC_RELEASE_VERSION: ${{ steps.updated-version.outputs.releaseVersion }}
+          HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualReleaseVersion }}
+          HORUSEC_RELEASE_VERSION: ${{ steps.updated-version.outputs.nextReleaseVersion }}
 
       # The changes made in the last step are committed to the branch that the workflow was triggered, this commit is not
       # going to trigger any workflow cause the skip ci in the commit message.
@@ -155,8 +148,8 @@ jobs:
         if: github.ref != 'refs/heads/main'
         uses: repo-sync/pull-request@v2
         with:
-          source_branch: "${{ steps.cherry-pick.outputs.branchName }}"
+          source_branch: "${{ steps.cherry-pick.outputs.cherryPickBranchName }}"
           destination_branch: "main"
           pr_title: "versioning:release - [skip ci] automatic pull request updating versioning files"
-          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.commitSha }} was cherry picked from the release branch, which already contains all the necessary changes."
+          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.commitShaToPick }} was cherry picked from the release branch, which already contains all the necessary changes."
           github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}

@@ -96,9 +96,11 @@ jobs:
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
         run: |
-          git tag $HORUSEC_ACTUAL_RELEASE_VERSION
-          echo $HORUSEC_ACTUAL_RELEASE_VERSION
+          git tag TEST
+          echo TEST
           sleep 5
+        env:
+          TEST: $HORUSEC_ACTUAL_RELEASE_VERSION
 
       # - name: Create tag
       #   run: mage CreateLocalTag ${{ steps.updated-version.outputs.releaseVersion }}

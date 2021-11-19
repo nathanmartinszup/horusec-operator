@@ -4,12 +4,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/magefile/mage/sh"
 	// mage:import
 	_ "github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
+	"github.com/google/go-github/v40/github"
 )
 
 const (
@@ -45,7 +47,7 @@ func UpdateVersioningFiles() error {
 		}
 	}
 
-	return updateOperatorVersion()
+	return updateOperatorVersions(getActualVersion(), getReleaseVersion())
 }
 
 func replacePlatformVersion(valueToReplace string) error {
@@ -76,11 +78,11 @@ func sedValues() []string {
 	}
 }
 
-func updateOperatorVersion() error {
+func updateOperatorVersions(old, new string) error {
 	for _, path := range sedValues() {
-		sed := fmt.Sprintf("s/%s/%s/g", getActualVersion(), getReleaseVersion())
+		sed := fmt.Sprintf("s/%s/%s/g", old, new)
 		if err := sh.Run("sed", "-i", sed, path); err != nil {
-
+			return err
 		}
 	}
 
@@ -97,4 +99,33 @@ func getReleaseVersion() string {
 
 func getPlatformVersion() string {
 	return os.Getenv(envPlatformVersion)
+}
+
+func UpdateVersioningFilesAlpha() error {
+	//release, resp, err := github.NewClient(nil).Repositories.GetLatestRelease(
+	//	context.Background(), "ZupIT", "horusec-operator")
+	//if github.CheckResponse(resp.Response) != nil {
+	//	return err
+	//}
+
+	release, resp, err := github.NewClient(nil).Repositories.GetLatestRelease(
+		context.Background(), "nathanmartinszup", "horusec-operator")
+	if github.CheckResponse(resp.Response) != nil {
+		return err
+	}
+
+	return updateOperatorVersions(*release.TagName, "alpha")
+}
+
+func SingAlphaImage() error {
+	//if err := sh.Run("cosign", "sign", "-key",
+	//	"$COSIGN_KEY_LOCATION", "horuszup/horusec-operator:alpha"); err != nil {
+	//	return err
+	//}
+	if err := sh.Run("cosign", "sign", "-key",
+		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
+		return err
+	}
+
+	return nil
 }

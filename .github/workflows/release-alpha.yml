@@ -113,7 +113,7 @@ jobs:
           name: alpha
           draft: false
           prerelease: true
-          commitish: ${{ github.sha }}
+          commitish: $(git log -1 --format=%H)
           gzip: false
           allow_override: true
           files: |

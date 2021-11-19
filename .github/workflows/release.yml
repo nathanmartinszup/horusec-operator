@@ -100,7 +100,7 @@ jobs:
           echo $TEST
           sleep 5
         env:
-          TEST: $HORUSEC_ACTUAL_RELEASE_VERSION
+          TEST: ${{ secrets.HORUSEC_ACTUAL_RELEASE_VERSION }}
 
       # - name: Create tag
       #   run: mage CreateLocalTag ${{ steps.updated-version.outputs.releaseVersion }}

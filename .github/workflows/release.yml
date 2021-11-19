@@ -96,8 +96,8 @@ jobs:
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
         run: |
-          git tag ${{ secrets.HORUSEC_ACTUAL_RELEASE_VERSION }}
-          echo ${{ secrets.HORUSEC_ACTUAL_RELEASE_VERSION }}
+          git tag $HORUSEC_ACTUAL_RELEASE_VERSION
+          echo $HORUSEC_ACTUAL_RELEASE_VERSION
           sleep 5
 
       # - name: Create tag

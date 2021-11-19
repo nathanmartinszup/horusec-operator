@@ -63,13 +63,21 @@ jobs:
       - name: Set Version to build
         run: mage UpdateVersioningFilesAlpha
 
+#      - name: Build and push
+#        uses: docker/build-push-action@v2
+#        with:
+#          push: true
+#          context: .
+#          file: ./deployments/dockerfiles/Dockerfile
+#          tags: horuszup/horusec-operator:alpha
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           push: true
           context: .
           file: ./deployments/dockerfiles/Dockerfile
-          tags: horuszup/horusec-operator:alpha
+          tags: nathanmartins18/testrepository:alpha
 
       - name: Sign image
         run: mage SingAlphaImage

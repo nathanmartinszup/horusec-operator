@@ -65,13 +65,13 @@ jobs:
         run: |
           mage DefaultGitConfig
 
-      #      - name: Import GPG key
-      #        uses: crazy-max/ghaction-import-gpg@v4
-      #        with:
-      #          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-      #          passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      #          git_user_signingkey: true
-      #          git_commit_gpgsign: true
+      # - name: Import GPG key
+      #   uses: crazy-max/ghaction-import-gpg@v4
+      #   with:
+      #     gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+      #     passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      #     git_user_signingkey: true
+      #     git_commit_gpgsign: true
 
       - name: Cosign Installer
         uses: sigstore/cosign-installer@main
@@ -95,7 +95,12 @@ jobs:
 
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
-        run: mage CreateLocalTag ${{ steps.updated-version.outputs.releaseVersion }}
+        run: |
+          git tag ${{ secrets.HORUSEC_ACTUAL_RELEASE_VERSION }}
+          sleep 5
+
+      # - name: Create tag
+      #   run: mage CreateLocalTag ${{ steps.updated-version.outputs.releaseVersion }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

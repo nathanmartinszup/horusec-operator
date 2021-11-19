@@ -126,6 +126,6 @@ func SingAlphaImage() error {
 		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
 		return err
 	}
-
+	
 	return nil
 }

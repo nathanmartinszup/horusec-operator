@@ -110,5 +110,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.nextBetaVersion }}
 
-      - name: Push Tag
-        run: mage GitPushAll

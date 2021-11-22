@@ -111,3 +111,16 @@ func SingAlphaImage() error {
 
 	return nil
 }
+
+func SingAlphaImage() error {
+	//if err := sh.Run("cosign", "sign", "-key",
+	//	"$COSIGN_KEY_LOCATION", "horuszup/horusec-operator:alpha"); err != nil {
+	//	return err
+	//}
+	if err := sh.Run("cosign", "sign", "-key",
+		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
+		return err
+	}
+
+	return nil
+}

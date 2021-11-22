@@ -84,18 +84,18 @@ jobs:
       #          file: ./deployments/dockerfiles/Dockerfile
       #          tags: horuszup/horusec-operator:alpha
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: .
-          file: ./deployments/dockerfiles/Dockerfile
-          tags: nathanmartins18/testrepository:alpha
+#      - name: Build and push
+#        uses: docker/build-push-action@v2
+#        with:
+#          push: true
+#          context: .
+#          file: ./deployments/dockerfiles/Dockerfile
+#          tags: nathanmartins18/testrepository:alpha
 
-      - name: Sign image
-        run: mage SingAlphaImage
-        env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
+#      - name: Sign image
+#        run: mage SingAlphaImage
+#        env:
+#          COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
 
       - name: Delete outdate release
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
@@ -117,7 +117,7 @@ jobs:
           name: alpha
           draft: false
           prerelease: true
-          commitish: ${{ steps.test.outputs.alphaCommitSha }}
+          commitish: ${{ github.sha }}
           gzip: true
           allow_override: true
           files: |

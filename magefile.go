@@ -5,10 +5,8 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"time"
-
 	"github.com/magefile/mage/sh"
+	"os"
 	// mage:import
 	_ "github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
 )
@@ -100,11 +98,9 @@ func getPlatformVersion() string {
 	return os.Getenv(envPlatformVersion)
 }
 
-func SingImage() error {
-	time.Sleep(time.Second * 5)
-	
+func SingImage(tag string) error {
 	if err := sh.Run("cosign", "sign", "-key",
-		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
+		"$COSIGN_KEY_LOCATION", tag); err != nil {
 		return err
 	}
 

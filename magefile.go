@@ -4,14 +4,12 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
 	"github.com/magefile/mage/sh"
 	// mage:import
 	_ "github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
-	"github.com/google/go-github/v40/github"
 )
 
 const (
@@ -101,22 +99,6 @@ func getPlatformVersion() string {
 	return os.Getenv(envPlatformVersion)
 }
 
-func UpdateVersioningFilesAlpha() error {
-	//release, resp, err := github.NewClient(nil).Repositories.GetLatestRelease(
-	//	context.Background(), "ZupIT", "horusec-operator")
-	//if github.CheckResponse(resp.Response) != nil {
-	//	return err
-	//}
-
-	release, resp, err := github.NewClient(nil).Repositories.GetLatestRelease(
-		context.Background(), "nathanmartinszup", "horusec-operator")
-	if github.CheckResponse(resp.Response) != nil {
-		return err
-	}
-
-	return updateOperatorVersions(*release.TagName, "alpha")
-}
-
 func SingAlphaImage() error {
 	//if err := sh.Run("cosign", "sign", "-key",
 	//	"$COSIGN_KEY_LOCATION", "horuszup/horusec-operator:alpha"); err != nil {
@@ -126,22 +108,6 @@ func SingAlphaImage() error {
 		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
 		return err
 	}
-
-	return nil
-}
-func CreateAlphaTagTest() error {
-	githubSha, err := sh.Output("git", "log", "-1", "--format=%H")
-	if err != nil {
-		return err
-	}
-
-	_ = sh.Run("git", "tag", "-d", "alpha")
-
-	if err := sh.Run("git", "tag", "alpha", githubSha); err != nil {
-		return err
-	}
-
-	fmt.Printf("::set-output name=alphaCommitSha::%s\n", githubSha)
 
 	return nil
 }

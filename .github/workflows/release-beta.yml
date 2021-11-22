@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       releaseType:
-        description: "Release types: (M - major); (m - minor); (p - patch)"
+        description: "Release types: (M - major); (m - minor)"
         required: true
 
 permissions: read-all
@@ -128,4 +128,4 @@ jobs:
             - `docker pull horuszup/horusec-operator:${{ steps.updated-version.outputs.nextBetaVersion }}`
 
       - name: Push All
-        run: git push --all
+        run: mage PushAll

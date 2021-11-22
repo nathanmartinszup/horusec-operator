@@ -127,5 +127,3 @@ jobs:
             ## Docker images
             - `docker pull horuszup/horusec-operator:${{ steps.updated-version.outputs.nextBetaVersion }}`
 
-#      - name: Push All
-#        run: mage GitPushAll

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: ReleaseBeta
+name: ReleaseRC
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ on:
 
 permissions: read-all
 jobs:
-  ReleaseBeta:
+  ReleaseRC:
     permissions:
       contents: write
       packages: write

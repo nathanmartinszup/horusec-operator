@@ -65,16 +65,16 @@ jobs:
 
       # The changes made in the last step are committed to the branch that the workflow was triggered, this commit is not
       # going to trigger any workflow cause the skip ci in the commit message.
-#      - name: Commit changes
-#        uses: EndBug/add-and-commit@v7.4.0
-#        with:
-#          push: false
-#          signoff: true
-#          author_name: horusec
-#          author_email: horusec@zup.com.br
-#          committer_name: horusec
-#          committer_email: horusec@zup.com.br
-#          message: "versioning:release - [skip ci] automatic commit updating versioning files"
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7.4.0
+        with:
+          push: false
+          signoff: true
+          author_name: horusec
+          author_email: horusec@zup.com.br
+          committer_name: horusec
+          committer_email: horusec@zup.com.br
+          message: "versioning:release - [skip ci] automatic commit updating versioning files"
 
       #      - name: Build and push
       #        uses: docker/build-push-action@v2
@@ -106,10 +106,8 @@ jobs:
           tag_name: alpha
 
       - name: Create tag
-        id:
-        run: |
-
-
+        id: test
+        run: mage CreateAlphaTag
 
       - name: Update alpha release
         uses: meeDamian/github-release@2.0
@@ -119,8 +117,8 @@ jobs:
           name: alpha
           draft: false
           prerelease: true
-          commitish: ${{ github.sha }}
-          gzip: folders
+          commitish: ${{ steps.test.outputs.alphaCommitSha }}
+          gzip: true
           allow_override: true
           files: |
             cosign.pub:./deployments/cosign.pub

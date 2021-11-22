@@ -26,7 +26,7 @@ on:
 
 permissions: read-all
 jobs:
-  Release:
+  ReleaseBeta:
     permissions:
       contents: write
       packages: write

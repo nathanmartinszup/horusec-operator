@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/magefile/mage/sh"
 	// mage:import
@@ -100,6 +101,8 @@ func getPlatformVersion() string {
 }
 
 func SingImage() error {
+	time.Sleep(time.Second * 5)
+	
 	if err := sh.Run("cosign", "sign", "-key",
 		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
 		return err

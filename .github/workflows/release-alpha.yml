@@ -107,7 +107,7 @@ jobs:
 
       - name: Create tag
         id: test
-        run: mage CreateAlphaTag
+        run: mage CreateAlphaTagTest
 
       - name: Update alpha release
         uses: meeDamian/github-release@2.0

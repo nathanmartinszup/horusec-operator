@@ -129,7 +129,7 @@ func SingAlphaImage() error {
 
 	return nil
 }
-func CreateAlphaTag() error {
+func CreateAlphaTagTest() error {
 	githubSha, err := sh.Output("git", "log", "-1", "--format=%H")
 	if err != nil {
 		return err

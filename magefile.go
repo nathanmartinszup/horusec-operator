@@ -99,8 +99,10 @@ func getPlatformVersion() string {
 }
 
 func SingImage(tag string) error {
+	imageWithTag := fmt.Sprintf("nathanmartins18/testrepository:%s", tag)
+
 	if err := sh.Run("cosign", "sign", "-key",
-		"$COSIGN_KEY_LOCATION", tag); err != nil {
+		"$COSIGN_KEY_LOCATION", imageWithTag); err != nil {
 		return err
 	}
 

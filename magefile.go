@@ -99,11 +99,7 @@ func getPlatformVersion() string {
 	return os.Getenv(envPlatformVersion)
 }
 
-func SingAlphaImage() error {
-	//if err := sh.Run("cosign", "sign", "-key",
-	//	"$COSIGN_KEY_LOCATION", "horuszup/horusec-operator:alpha"); err != nil {
-	//	return err
-	//}
+func SingImage() error {
 	if err := sh.Run("cosign", "sign", "-key",
 		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
 		return err

@@ -94,7 +94,7 @@ jobs:
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
       - name: CreateReleaseBranch
-        run: mage CheckoutRcBranch ${{ steps.updated-version.outputs.nextReleaseVersion }}
+        run: mage CheckoutRcBranch ${{ steps.updated-version.outputs.nextBetaVersion }}
 
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag

@@ -20,9 +20,6 @@ on:
       releaseType:
         description: "Release types: (M - major); (m - minor); (p - patch)"
         required: true
-      horusecPlatformVersion:
-        description: "Version of horusec-platform for this release. Ex: v0.0.0"
-        required: true
 
 permissions: read-all
 jobs:
@@ -93,6 +90,19 @@ jobs:
           HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .
+          file: ./deployments/dockerfiles/Dockerfile
+          tags: nathanmartins18/testrepository:${{ steps.updated-version.outputs.nextBetaVersion }}
+
+      - name: Sign image
+        run: mage SingImage ${{ steps.updated-version.outputs.nextBetaVersion }}
+        env:
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
+
       - name: CreateReleaseBranch
         run: mage CheckoutRcBranch ${{ steps.updated-version.outputs.nextBetaVersion }}
 
@@ -118,4 +128,4 @@ jobs:
             - `docker pull horuszup/horusec-operator:${{ steps.updated-version.outputs.nextBetaVersion }}`
 
       - name: Push All
-        run: mage GitPushAll
+        run: git push --all

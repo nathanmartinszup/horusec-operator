@@ -105,6 +105,12 @@ jobs:
           delete_release: true
           tag_name: alpha
 
+      - name: Create tag
+        id:
+        run: |
+
+
+
       - name: Update alpha release
         uses: meeDamian/github-release@2.0
         with:
@@ -114,12 +120,10 @@ jobs:
           draft: false
           prerelease: true
           commitish: ${{ github.sha }}
-          gzip: true
+          gzip: folders
           allow_override: true
           files: |
             cosign.pub:./deployments/cosign.pub
           body: |
             ## Docker images
             - `docker pull horuszup/horusec-operator:alpha`
-        env:
-          COMMIT_SHA: $(git log -1 --format=%H)

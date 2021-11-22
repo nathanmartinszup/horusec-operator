@@ -126,6 +126,22 @@ func SingAlphaImage() error {
 		"$COSIGN_KEY_LOCATION", "nathanmartins18/testrepository"); err != nil {
 		return err
 	}
-	
+
+	return nil
+}
+func CreateAlphaTag() error {
+	githubSha, err := sh.Output("git", "log", "-1", "--format=%H")
+	if err != nil {
+		return err
+	}
+
+	_ = sh.Run("git", "tag", "-d", "alpha")
+
+	if err := sh.Run("git", "tag", "alpha", githubSha); err != nil {
+		return err
+	}
+
+	fmt.Printf("::set-output name=alphaCommitSha::%s\n", githubSha)
+
 	return nil
 }

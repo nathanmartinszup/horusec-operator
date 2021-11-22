@@ -18,7 +18,6 @@
 #  push:
 #    branches:
 #      - main
-#      - release/v2.3
 #
 #permissions: read-all
 #jobs:

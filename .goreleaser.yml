@@ -36,7 +36,6 @@ archives:
   - format: binary
 release:
   draft: true
-  prerelease: true
   extra_files:
     - glob: ./deployments/cosign.pub
 signs:
@@ -58,6 +57,7 @@ dockers:
     dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
   - image_templates:
       - "nathanmartins18/testrepository:{{ .Tag }}"
+    skip_push: false
   - image_templates:
       - "nathanmartins18/testrepository:latest"
     skip_push: auto

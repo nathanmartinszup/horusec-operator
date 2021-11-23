@@ -90,7 +90,7 @@ jobs:
           HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
-      - name: CheckoutReleaseBranch
+      - name: Checkout Release Branch
         run: mage CheckoutReleaseBranch ${{ steps.updated-version.outputs.nextReleaseBranchName }}
 
       - name: Build and push
@@ -127,3 +127,5 @@ jobs:
             ## Docker images
             - `docker pull horuszup/horusec-operator:${{ steps.updated-version.outputs.nextBetaVersion }}`
 
+      - name: Push All
+        run: mage GitPushAll

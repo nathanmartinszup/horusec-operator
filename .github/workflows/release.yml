@@ -110,8 +110,7 @@ jobs:
       # This step updates the defaults.json to the platform version passed in the workflow input for all microservices.
       # The README.md and kustomization.yaml also are updated to match the new operator version that ir being released.
       - name: Update versioning files
-        run: |
-          mage UpdateVersioningFiles
+        run: mage UpdateVersioningFiles
         env:
           HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
           HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualReleaseVersion }}

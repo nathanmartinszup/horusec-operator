@@ -36,7 +36,6 @@ archives:
   - format: binary
 release:
   draft: true
-  prerelease: auto
   extra_files:
     - glob: ./deployments/cosign.pub
 signs:

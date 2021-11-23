@@ -52,7 +52,6 @@ dockers:
   - id: horusec-operator
     goos: linux
     goarch: amd64
-    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
     ids:
       - horusec-operator
   - image_templates:
@@ -65,6 +64,7 @@ dockers:
       - "nathanmartins18/testrepository:v{{ .Major }}"
     skip_push: auto
     use: docker
+    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
     build_flag_templates:
       - "--pull"
       - "--label=org.opencontainers.image.created={{.Date}}"

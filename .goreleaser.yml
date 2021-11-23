@@ -52,6 +52,7 @@ dockers:
   - id: horusec-operator
     goos: linux
     goarch: amd64
+    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
     ids:
       - horusec-operator
   - image_templates:
@@ -63,7 +64,6 @@ dockers:
   - image_templates:
       - "nathanmartins18/testrepository:v{{ .Major }}"
     skip_push: auto
-    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
     use: docker
     build_flag_templates:
       - "--pull"

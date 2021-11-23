@@ -90,6 +90,9 @@ jobs:
           HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
+      - name: CheckoutReleaseBranch
+        run: mage CheckoutReleaseBranch ${{ steps.updated-version.outputs.nextReleaseBranchName }}
+
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -102,9 +105,6 @@ jobs:
         run: mage SingImage ${{ steps.updated-version.outputs.nextBetaVersion }}
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
-
-      - name: CreateReleaseBranch
-        run: mage CheckoutRcBranch ${{ steps.updated-version.outputs.nextBetaVersion }}
 
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
@@ -120,7 +120,7 @@ jobs:
           prerelease: true
           commitish: ${{ github.sha }}
           gzip: true
-          allow_override: true
+          allow_override: false
           files: |
             cosign.pub:./deployments/cosign.pub
           body: |

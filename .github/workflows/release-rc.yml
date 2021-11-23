@@ -102,7 +102,7 @@ jobs:
           tags: nathanmartins18/testrepository:${{ steps.updated-version.outputs.nextRCVersion }}
 
       - name: Sign image
-        run: mage SingImage ${{ steps.updated-version.outputs.nextRCVersion }}
+        run: mage SignImage ${{ steps.updated-version.outputs.nextRCVersion }}
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
 

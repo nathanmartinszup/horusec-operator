@@ -68,7 +68,7 @@ jobs:
           tags: nathanmartins18/testrepository:alpha
 
       - name: Sign image
-        run: mage SingImage alpha
+        run: mage SignImage alpha
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
 

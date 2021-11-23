@@ -98,7 +98,7 @@ func getPlatformVersion() string {
 	return os.Getenv(envPlatformVersion)
 }
 
-func SingImage(tag string) error {
+func SignImage(tag string) error {
 	imageWithTag := fmt.Sprintf("nathanmartins18/testrepository:%s", tag)
 
 	if err := sh.Run("cosign", "sign", "-key",

@@ -27,4 +27,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: horuszup/horusec-operator
-  newTag: v5.0.0
+  newTag: v5.1.0

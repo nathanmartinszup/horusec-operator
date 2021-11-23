@@ -54,11 +54,15 @@ dockers:
     goarch: amd64
     ids:
       - horusec-operator
-    image_templates:
-      - "nathanmartins18/testrepository:latest"
+  - image_templates:
       - "nathanmartins18/testrepository:{{ .Tag }}"
-      - "nathanmartins18/testrepository:v{{ .Major }}"
     skip_push: false
+  - image_templates:
+      - "nathanmartins18/testrepository:latest"
+    skip_push: auto
+  - image_templates:
+      - "nathanmartins18/testrepository:v{{ .Major }}"
+    skip_push: auto
     dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
     use: docker
     build_flag_templates:

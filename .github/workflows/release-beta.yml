@@ -96,7 +96,7 @@ jobs:
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
         run: |
-          mage CreateLocalTag ${{ steps.updated-version.outputs.nextBetaVersion }}
+          mage -v CreateLocalTag ${{ steps.updated-version.outputs.nextBetaVersion }}
           sleep 5
 
       - name: Run GoReleaser

@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       releaseType:
-        description: "Release types: (M - major); (m - minor)"
+        description: "Release types: (M - major); (m - minor); (p - patch)"
         required: true
 
 permissions: read-all

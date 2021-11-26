@@ -93,6 +93,9 @@ jobs:
           HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
           HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
 
+      - name: Checkout Release Branch
+        run: mage CheckoutReleaseBranch ${{ steps.updated-version.outputs.nextReleaseBranchName }}
+
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
         run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextReleaseVersion }}
@@ -123,9 +126,10 @@ jobs:
         with:
           push: true
           signoff: true
-          author_name: horusec
+          author_name: Horusec
+          branch: ${{ steps.updated-version.outputs.nextReleaseBranchName }}
           author_email: horusec@zup.com.br
-          committer_name: horusec
+          committer_name: Horusec
           committer_email: horusec@zup.com.br
           message: "versioning:release - [skip ci] automatic commit updating versioning files"
 
@@ -134,7 +138,6 @@ jobs:
       # workflow is started from a branch that isn't the main branch, for example a release branch.
       # When the workflow it's triggered to run on main, the commit it's going to be made directly to the main branch.
       - name: Cherry pick
-        if: github.ref != 'refs/heads/main'
         id: cherry-pick
         run: |
           mage CherryPick
@@ -143,7 +146,6 @@ jobs:
       # into the main branch. As the last commit, this also needs to run only when the release workflow is started from a
       # branch that isn't the main branch. Others workflows should be skipped cause of the skip ci in the pull request title.
       - name: Create Pull Request
-        if: github.ref != 'refs/heads/main'
         uses: repo-sync/pull-request@v2
         with:
           source_branch: "${{ steps.cherry-pick.outputs.cherryPickBranchName }}"
